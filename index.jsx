@@ -21,6 +21,7 @@ module.exports = React.createClass({
       rows: [],
       dimensions: [],
       activeDimensions: [],
+      mandatoryDimensions: [],
       reduce: function() {},
       tableClassName: '',
       csvDownloadFileName: 'table.csv',
@@ -52,6 +53,7 @@ module.exports = React.createClass({
       sortBy: this.props.sortBy,
       sortDir: this.props.sortDir,
       hiddenColumns: this.props.hiddenColumns,
+      mandatoryDimensions: this.props.mandatoryDimensions,
       solo: this.props.solo,
       rows: []
     }
@@ -63,7 +65,8 @@ module.exports = React.createClass({
     this.dataFrame = DataFrame({
       rows: this.props.rows,
       dimensions: this.props.dimensions,
-      reduce: this.props.reduce
+      reduce: this.props.reduce,
+      mandatoryDimensions: this.props.mandatoryDimensions
     })
 
     this.updateRows()
@@ -78,7 +81,8 @@ module.exports = React.createClass({
       this.dataFrame = DataFrame({
         rows: newProps.rows,
         dimensions: this.props.dimensions,
-        reduce: this.props.reduce
+        reduce: this.props.reduce,
+        mandatoryDimensions: this.props.mandatoryDimensions
       })
 
       this.updateRows()
@@ -120,7 +124,8 @@ module.exports = React.createClass({
         <Dimensions
           dimensions={this.props.dimensions}
           selectedDimensions={this.state.dimensions}
-          onChange={this.setDimensions} />
+          onChange={this.setDimensions}
+          mandatoryDimensions={this.props.mandatoryDimensions} />
       }
 
         <ColumnControl

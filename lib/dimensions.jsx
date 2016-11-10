@@ -7,6 +7,7 @@ module.exports = React.createClass({
     return {
       dimensions: [],
       selectedDimensions: [],
+      mandatoryDimensions: [],
       onChange: function () {}
     }
   },
@@ -14,7 +15,12 @@ module.exports = React.createClass({
   render: function () {
     var self = this
     var selectedDimensions = this.props.selectedDimensions
+    var mandatoryDimensions = this.props.mandatoryDimensions
     var nSelected = selectedDimensions.length
+    
+    var nonMandatory = this.props.dimensions.filter(function(e){
+      return self.props.mandatoryDimensions.indexOf(e["title"]) == -1 ;
+    });
 
     return (
       <div className="reactPivot-dimensions">
@@ -22,7 +28,7 @@ module.exports = React.createClass({
 
         <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
           <option value={''}>Sub Dimension...</option>
-          {self.props.dimensions.map(function(dimension) {
+          {nonMandatory.map(function(dimension) {
             return <option key={dimension.title}>{dimension.title}</option>
           })}
         </select>
@@ -31,13 +37,20 @@ module.exports = React.createClass({
   },
 
   renderDimension: function(selectedDimension, i) {
+    var self = this;
+    
+    var nonMandatory = this.props.dimensions.filter(function(e){
+      return (self.props.mandatoryDimensions.indexOf(e["title"]) == -1) || selectedDimension == e["title"] ;
+    });
+
     return (
       <select
         value={selectedDimension}
         onChange={partial(this.toggleDimension, i)}
-        key={selectedDimension} >
+        key={selectedDimension}
+        disabled={!this.props.mandatoryDimensions.indexOf(selectedDimension)} >
         <option></option>
-        {this.props.dimensions.map(function(dimension) {
+        {nonMandatory.map(function(dimension) {
           return (
             <option
               value={dimension.title}
