@@ -8,6 +8,7 @@ module.exports = React.createClass({
       dimensions: [],
       selectedDimensions: [],
       mandatoryDimensions: [],
+      maxDimensions: null,
       onChange: function () {}
     }
   },
@@ -21,17 +22,17 @@ module.exports = React.createClass({
     var nonMandatory = this.props.dimensions.filter(function(e){
       return self.props.mandatoryDimensions.indexOf(e["title"]) == -1 ;
     });
-
     return (
       <div className="reactPivot-dimensions">
         {selectedDimensions.map(this.renderDimension)}
-
-        <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
-          <option value={''}>Sub Dimension...</option>
-          {nonMandatory.map(function(dimension) {
-            return <option key={dimension.title}>{dimension.title}</option>
-          })}
-        </select>
+        {(this.props.maxDimensions == null || this.props.selectedDimensions.length < this.props.maxDimensions) &&
+          <select value={''} onChange={partial(self.toggleDimension, nSelected)}>
+            <option value={''}>Sub Dimension...</option>
+            {nonMandatory.map(function(dimension) {
+              return <option key={dimension.title}>{dimension.title}</option>
+            })}
+          </select>
+        }
       </div>
     )
   },
@@ -42,24 +43,23 @@ module.exports = React.createClass({
     var nonMandatory = this.props.dimensions.filter(function(e){
       return (self.props.mandatoryDimensions.indexOf(e["title"]) == -1) || selectedDimension == e["title"] ;
     });
-
     return (
-      <select
-        value={selectedDimension}
-        onChange={partial(this.toggleDimension, i)}
-        key={selectedDimension}
-        disabled={!this.props.mandatoryDimensions.indexOf(selectedDimension)} >
-        <option></option>
-        {nonMandatory.map(function(dimension) {
-          return (
-            <option
-              value={dimension.title}
-              key={dimension.title} >
-              {dimension.title}
-            </option>
-          )
-        })}
-      </select>
+        <select
+          value={selectedDimension}
+          onChange={partial(this.toggleDimension, i)}
+          key={selectedDimension}
+          disabled={!this.props.mandatoryDimensions.indexOf(selectedDimension)} >
+          <option></option>
+          {nonMandatory.map(function(dimension) {
+            return (
+              <option
+                value={dimension.title}
+                key={dimension.title} >
+                {dimension.title}
+              </option>
+            )
+          })}
+        </select>
     )
   },
 

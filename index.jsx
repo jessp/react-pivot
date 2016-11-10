@@ -35,6 +35,7 @@ module.exports = React.createClass({
       eventBus: new Emitter,
       compact: false,
       excludeSummaryFromExport: false,
+      maxDimensions: null,
       onData: function () {}
     }
   },
@@ -55,7 +56,8 @@ module.exports = React.createClass({
       hiddenColumns: this.props.hiddenColumns,
       mandatoryDimensions: this.props.mandatoryDimensions,
       solo: this.props.solo,
-      rows: []
+      rows: [],
+      maxDimensions: this.props.maxDimensions
     }
   },
 
@@ -66,7 +68,8 @@ module.exports = React.createClass({
       rows: this.props.rows,
       dimensions: this.props.dimensions,
       reduce: this.props.reduce,
-      mandatoryDimensions: this.props.mandatoryDimensions
+      mandatoryDimensions: this.props.mandatoryDimensions,
+      maxDimensions: this.props.maxDimensions
     })
 
     this.updateRows()
@@ -82,7 +85,8 @@ module.exports = React.createClass({
         rows: newProps.rows,
         dimensions: this.props.dimensions,
         reduce: this.props.reduce,
-        mandatoryDimensions: this.props.mandatoryDimensions
+        mandatoryDimensions: this.props.mandatoryDimensions,
+        maxDimensions: this.props.maxDimensions
       })
 
       this.updateRows()
@@ -125,7 +129,8 @@ module.exports = React.createClass({
           dimensions={this.props.dimensions}
           selectedDimensions={this.state.dimensions}
           onChange={this.setDimensions}
-          mandatoryDimensions={this.props.mandatoryDimensions} />
+          mandatoryDimensions={this.props.mandatoryDimensions}
+          maxDimensions={this.props.maxDimensions} />
       }
 
         <ColumnControl
