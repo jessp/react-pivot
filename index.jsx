@@ -178,7 +178,6 @@ module.exports = React.createClass({
     var sortBy = sortCol.type === 'dimension' ? sortCol.title : sortCol.value
     var sortDir = this.state.sortDir
 
-    console.log(this.state.dimensions);
     var calcOpts = {
       dimensions: this.state.dimensions,
       sortBy: sortBy,
