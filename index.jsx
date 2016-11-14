@@ -80,17 +80,18 @@ module.exports = React.createClass({
          this.setHiddenColumns(newProps.hiddenColumns);
      }
 
-    if(newProps.rows !== this.props.rows) {
+    if((newProps.rows !== this.props.rows) || (newProps.activeDimensions !== this.props.activeDimensions)) {
       this.dataFrame = DataFrame({
         rows: newProps.rows,
-        dimensions: this.props.dimensions,
-        reduce: this.props.reduce,
-        mandatoryDimensions: this.props.mandatoryDimensions,
-        maxDimensions: this.props.maxDimensions
+        dimensions: newProps.dimensions,
+        reduce: newProps.reduce,
+        mandatoryDimensions: newProps.mandatoryDimensions,
+        maxDimensions: newProps.maxDimensions
       })
-
-      this.updateRows()
+      this.setDimensions(newProps.activeDimensions);
     }
+
+    
   },
 
   getColumns: function() {
@@ -116,7 +117,6 @@ module.exports = React.createClass({
         value: c.value, className: c.className
       })
     })
-
     return columns
   },
 
@@ -168,7 +168,7 @@ module.exports = React.createClass({
     return html
   },
 
-  updateRows: function () {
+  updateRows: function (dimen) {
     var columns = this.getColumns()
 
     var sortByTitle = this.state.sortBy
@@ -178,6 +178,7 @@ module.exports = React.createClass({
     var sortBy = sortCol.type === 'dimension' ? sortCol.title : sortCol.value
     var sortDir = this.state.sortDir
 
+    console.log(this.state.dimensions);
     var calcOpts = {
       dimensions: this.state.dimensions,
       sortBy: sortBy,

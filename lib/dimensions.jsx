@@ -64,6 +64,7 @@ module.exports = React.createClass({
   },
 
   toggleDimension: function (iDimension, evt) {
+    // console.log(iDimension, evt);
     var dimension = evt.target.value
     var dimensions = this.props.selectedDimensions
 
