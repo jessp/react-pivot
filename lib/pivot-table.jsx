@@ -128,7 +128,9 @@ module.exports = React.createClass({
       <td className={col.className}
           key={[col.title, row.key].join('\xff')}
           title={col.title}>
-        <span dangerouslySetInnerHTML={{__html: text || ''}}></span> {solo}
+          {React.isValidElement(text) && text}
+          {!React.isValidElement(text) && <span dangerouslySetInnerHTML={{__html: text || ''}}></span>}
+          {solo}
       </td>
     )
   },
