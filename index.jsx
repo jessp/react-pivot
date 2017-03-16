@@ -203,12 +203,12 @@ module.exports = React.createClass({
       calcOpts.filter = function(dVals) {
         if (filter != null){
           if (theSearchTerm && theSearchTerm != ""){
-            var theValues = Object.values(dVals).join(" ").toUpperCase() + " " + Object.values(dVals).join(" ").toUpperCase().reverse();
+            var theValues = Object.values(dVals).join(" ").toUpperCase() + " " + Object.values(dVals).reverse().join(" ").toUpperCase();
             return (dVals[filter.title] === filter.value) && mm.isMatch(theValues, theSearchTerm);
           }
           return dVals[filter.title] === filter.value
         } else if (theSearchTerm && theSearchTerm != ""){
-          var theValues = Object.values(dVals).join(" ").toUpperCase()  + " " + Object.values(dVals).join(" ").toUpperCase().reverse();
+          var theValues = Object.values(dVals).join(" ").toUpperCase()  + " " + Object.values(dVals).reverse().join(" ").toUpperCase();
           return mm.isMatch(theValues, theSearchTerm);
         } else {
           return true
