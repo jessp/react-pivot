@@ -198,16 +198,17 @@ module.exports = React.createClass({
     var filter = this.state.solo
     var theSearchTerm = this.props.searchTerm
 
+
     if (filter || (this.props.searchTerm && this.props.searchTerm != "")) {
       calcOpts.filter = function(dVals) {
         if (filter != null){
           if (theSearchTerm && theSearchTerm != ""){
-            var theValues = Object.values(dVals).join(" ").toUpperCase()
+            var theValues = Object.values(dVals).join(" ").toUpperCase() + " " + Object.values(dVals).join(" ").toUpperCase().reverse();
             return (dVals[filter.title] === filter.value) && mm.isMatch(theValues, theSearchTerm);
           }
           return dVals[filter.title] === filter.value
         } else if (theSearchTerm && theSearchTerm != ""){
-          var theValues = Object.values(dVals).join(" ").toUpperCase()
+          var theValues = Object.values(dVals).join(" ").toUpperCase()  + " " + Object.values(dVals).join(" ").toUpperCase().reverse();
           return mm.isMatch(theValues, theSearchTerm);
         } else {
           return true
