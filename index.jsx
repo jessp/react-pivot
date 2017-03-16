@@ -6,6 +6,8 @@ var _ = {
 var React = require('react')
 var DataFrame = require('dataframe')
 var Emitter = require('wildemitter')
+var mm = require('micromatch')
+var values = require('object.values')
 
 var partial = require('./lib/partial')
 var download = require('./lib/download')
@@ -13,6 +15,11 @@ var getValue = require('./lib/get-value')
 var PivotTable = require('./lib/pivot-table.jsx')
 var Dimensions = require('./lib/dimensions.jsx')
 var ColumnControl = require('./lib/column-control.jsx')
+
+if (!Object.values) {
+    values.shim();
+}
+
 
 module.exports = React.createClass({
   displayName: 'ReactPivot',
@@ -36,6 +43,7 @@ module.exports = React.createClass({
       compact: false,
       excludeSummaryFromExport: false,
       maxDimensions: null,
+      searchTerm:'',
       onData: function () {}
     }
   },
@@ -57,7 +65,8 @@ module.exports = React.createClass({
       mandatoryDimensions: this.props.mandatoryDimensions,
       solo: this.props.solo,
       rows: [],
-      maxDimensions: this.props.maxDimensions
+      maxDimensions: this.props.maxDimensions,
+      searchTerm: this.props.searchTerm
     }
   },
 
@@ -69,7 +78,8 @@ module.exports = React.createClass({
       dimensions: this.props.dimensions,
       reduce: this.props.reduce,
       mandatoryDimensions: this.props.mandatoryDimensions,
-      maxDimensions: this.props.maxDimensions
+      maxDimensions: this.props.maxDimensions,
+      searchTerm: this.props.searchTerm
     })
 
     this.updateRows()
@@ -86,7 +96,8 @@ module.exports = React.createClass({
         dimensions: newProps.dimensions,
         reduce: newProps.reduce,
         mandatoryDimensions: newProps.mandatoryDimensions,
-        maxDimensions: newProps.maxDimensions
+        maxDimensions: newProps.maxDimensions,
+        searchTerm: this.props.searchTerm
       })
       this.setDimensions(newProps.activeDimensions);
     }
@@ -184,15 +195,28 @@ module.exports = React.createClass({
       sortDir: sortDir,
       compact: this.props.compact
     }
-
     var filter = this.state.solo
-    if (filter) {
+    var theSearchTerm = this.props.searchTerm
+
+    if (filter || (this.props.searchTerm && this.props.searchTerm != "")) {
       calcOpts.filter = function(dVals) {
-        return dVals[filter.title] === filter.value
+        if (filter != null){
+          if (theSearchTerm && theSearchTerm != ""){
+            var theValues = Object.values(dVals).join(" ").toUpperCase()
+            return (dVals[filter.title] === filter.value) && mm.isMatch(theValues, theSearchTerm);
+          }
+          return dVals[filter.title] === filter.value
+        } else if (theSearchTerm && theSearchTerm != ""){
+          var theValues = Object.values(dVals).join(" ").toUpperCase()
+          return mm.isMatch(theValues, theSearchTerm);
+        } else {
+          return true
+        }
       }
     }
-
     var rows = this.dataFrame.calculate(calcOpts)
+
+
     this.setState({rows: rows})
     this.props.onData(rows)
   },
