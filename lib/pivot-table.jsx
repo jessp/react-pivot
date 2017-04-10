@@ -70,7 +70,9 @@ module.exports = React.createClass({
                   key={col.title}>
 
                 {hide}
-                {col.title}
+                <span onClick={partial(self.props.onSort, col.title)}>
+                  {col.title}
+                </span>
               </th>
             )
           })}
