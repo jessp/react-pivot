@@ -65,12 +65,10 @@ module.exports = React.createClass({
 
             return (
               <th className={className}
-                  onClick={partial(self.props.onSort, col.title)}
-                  style={{cursor: 'pointer'}}
                   key={col.title}>
-
                 {hide}
-                <span onClick={partial(self.props.onSort, col.title)}>
+                <span onClick={partial(self.props.onSort, col.title)}
+                      style={{cursor: 'pointer'}}>
                   {col.title}
                 </span>
               </th>
